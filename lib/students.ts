@@ -42,9 +42,17 @@ export function getStudents(): Student[] {
   return cached;
 }
 
+function foldForCompare(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, ""); // strip accents so "Léo" and "Leo" match
+}
+
 export function findStudentByUsername(username: string): Student | undefined {
-  const normalized = username.trim().toLowerCase();
-  return getStudents().find((s) => s.username.toLowerCase() === normalized);
+  const normalized = foldForCompare(username);
+  return getStudents().find((s) => foldForCompare(s.username) === normalized);
 }
 
 export function findStudentById(id: string): Student | undefined {
