@@ -2,23 +2,23 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { findStudentById } from "@/lib/students";
+import { findStudentByUsername } from "@/lib/students";
 import { verifyPassword } from "@/lib/passwords";
 import { createSessionToken, COOKIE_NAME, MAX_AGE_SECONDS } from "@/lib/session";
 
 export type LoginState = { error?: string };
 
 export async function login(_prevState: LoginState, formData: FormData): Promise<LoginState> {
-  const id = String(formData.get("id") ?? "").trim();
+  const username = String(formData.get("id") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
-  if (!id || !password) {
-    return { error: "Please enter your student ID and password." };
+  if (!username || !password) {
+    return { error: "Please enter your first name and password." };
   }
 
-  const student = findStudentById(id);
+  const student = findStudentByUsername(username);
   if (!student || !verifyPassword(password, student.passwordHash)) {
-    return { error: "Invalid student ID or password." };
+    return { error: "Invalid first name or password." };
   }
 
   const token = createSessionToken(student.id);

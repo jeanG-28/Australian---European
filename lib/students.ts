@@ -3,6 +3,7 @@ import path from "node:path";
 
 export type Student = {
   id: string;
+  username: string;
   passwordHash: string;
   name: string;
   dob: string;
@@ -39,6 +40,11 @@ function loadRaw(): Student[] {
 export function getStudents(): Student[] {
   if (!cached) cached = loadRaw();
   return cached;
+}
+
+export function findStudentByUsername(username: string): Student | undefined {
+  const normalized = username.trim().toLowerCase();
+  return getStudents().find((s) => s.username.toLowerCase() === normalized);
 }
 
 export function findStudentById(id: string): Student | undefined {
