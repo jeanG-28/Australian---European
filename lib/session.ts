@@ -13,6 +13,10 @@ function getSecret(): string {
   return secret;
 }
 
+export function isSessionSecretConfigured(): boolean {
+  return Boolean(process.env.SESSION_SECRET);
+}
+
 export function createSessionToken(studentId: string): string {
   const payload = JSON.stringify({
     sid: studentId,
